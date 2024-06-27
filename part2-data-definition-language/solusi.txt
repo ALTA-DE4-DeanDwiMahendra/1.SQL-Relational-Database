@@ -1,34 +1,129 @@
 1) Create database alta_online_shop.
 Sulisi SQL:
-
+create database alta_online_shop;
 2) Dari schema Olshop yang telah kamu kerjakan di, Implementasikanlah menjadi table pada MySQL.
     2.a Create table user
     Sulisi SQL:
-
+create table if not exists pengguna (
+ user_id serial primary key,
+ username varchar(50) not null,
+ nama varchar (255),
+ alamat varchar (255),
+ tanggal_lahir date,
+ status_user varchar (20),
+ gender varchar (10),
+ password varchar (255) not null,
+ email varchar (100) not null,
+ created_at timestamp default current_timestamp,
+ update_at timestamp default current_timestamp
+);
     2.b Create table product, product_type, product_description, payment_method.
     Sulisi SQL:
+-- tabel product_type
+create table if not exists product_type (
+    id serial primary key,
+    type_name varchar(100) not null,
+    description text
+);
+
+-- tabel product_description
+create table if not exists product_description (
+    id serial primary key,
+    description text not null
+);
+
+-- tabel product
+create table if not exists product (
+    product_id serial primary key,
+    product_name varchar(100) not null,
+    product_type_id int,
+    product_description_id int,
+    harga decimal(10,2) not null,
+    stock int not null,
+    foreign key (product_type_id) references product_type(id) on delete cascade,
+    foreign key (product_description_id) references product_description(id) on delete cascade
+);
+
+-- tabel payment_method
+create table if not exists payment_method (
+    payment_method_id serial primary key,
+    method_name varchar(50) not null,
+    created_at timestamp default current_timestamp
+);
 
     3.c Create table transaction, transaction detail.
     Sulisi SQL:
+-- tabel transaksi
+create table transaksi (
+    transaction_id serial primary key,
+    user_id int,
+    transaction_date timestamp default current_timestamp,
+    total_amount decimal(10,2) not null,
+    payment_method_id int,
+    foreign key (payment_method_id) references payment_method (payment_method_id)
+);
+
+-- tabel transaksi detail
+create table transaction_detail (
+    transaction_detail_id serial primary key,
+    transaction_id int,
+    product_id int,
+    quantity int not null,
+    price decimal(10,2) not null,
+    foreign key (transaction_id) references transaksi (transaction_id),
+    foreign key (product_id) references product (product_id)
+);
+
 
 3) Create table kurir dengan field id, name, created_at, updated_at.
 Sulisi SQL:
+-- membuat tabel kurir
+create table kurir(
+    id serial primary key,
+    name varchar(255),
+    created_at timestamp,
+    updated_at timestamp
+);
 
 4) Tambahkan ongkos_dasar column di tabel kurir.
 Sulisi SQL:
+alter table transaksi 
+add column ongkos_dasar int;
 
 5) Rename tabel kurir menjadi shipping.
 Sulisi SQL:
+alter table kurir rename to shipping;
 
 6) Hapus / Drop tabel shipping karena ternyata tidak dibutuhkan.
 Sulisi SQL:
+drop table shipping;
 
 7) Silahkan menambahkan entity baru dengan relation 1-to-1, 1-to-many, many-to-many. Seperti:
     7.a) 1-to-1: payment_method dengan description.
     Sulisi SQL:
+    create table if not exists payment_description (
+    payment_method_id serial primary key,
+    description text,
+    foreign key (payment_method_id) references payment_method(payment_method_id) on delete cascade
+    );
 
     7.b) 1-to-many: user dengan alamat.
     Sulisi SQL:
+    create table if not exists alamat (
+    id serial primary key,
+    user_id int,
+    alamat varchar(255),
+    kota varchar(100),
+    negara varchar(100),
+    foreign key (user_id) references pengguna(user_id) on delete cascade
+    );
 
     7.c) many-to-many: user dengan payment_method menjadi user_payment_method_detail.
     Sulisi SQL:
+    create table user_payment_method_detail (
+    user_id int,
+    payment_method_id int,
+    primary key (user_id, payment_method_id),
+    foreign key (user_id) references pengguna(user_id) on delete cascade,
+    foreign key (payment_method_id) references payment_method(payment_method_id) on delete cascade
+    );

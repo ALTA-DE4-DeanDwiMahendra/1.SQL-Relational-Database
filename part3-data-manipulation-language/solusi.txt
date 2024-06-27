@@ -2,57 +2,189 @@ RELEASE 1:
 
 1) Insert
     1.a) Insert 3 product type.
+insert into product_type (type_name) values ('Elektronik');
+insert into product_type (type_name) values ('Clothing');
+insert into product_type (type_name) values ('Food');
 
     1.b) Insert 2 product dengan product type id = 1
+insert into product (product_name, product_type_id, product_description_id, harga, stock) 
+values ('Sumsang', 1, 1, 599.99, 50);
+insert into product (product_name, product_type_id, product_description_id, harga, stock)
+values ('Huawawei', 1, 2, 15000, 500);
 
     1.c) Insert 3 product dengan product type id = 2
+insert into product (product_name, product_type_id, product_description_id, harga, stock) 
+values ('Naykie', 2, 3, 20000, 50);
+insert into product (product_name, product_type_id, product_description_id, harga, stock)
+values ('Uniklho', 2, 4, 45000, 100);
+insert into product (product_name, product_type_id, product_description_id, harga, stock)
+values ('Kereseda', 2, 5, 35000, 150);
 
     1.d) Insert 3 product dengan product type id = 3
+insert into product (product_name, product_type_id, product_description_id, harga, stock) 
+values ('Seblak', 3, 6, 10000, 50);
+insert into product (product_name, product_type_id, product_description_id, harga, stock)
+values ('Jasuke', 3, 7, 15000, 50);
+insert into product (product_name, product_type_id, product_description_id, harga, stock)
+values ('Cimol', 3, 8, 5000, 50);
 
     1.e) Insert product description pada setiap product.
+insert into product_description (description) 
+values ('Smartphone Sumsang ini punya fitur yang paling update dan kameranya nyaingin Iphone lho, cobalah!!');
+insert into product_description (description) 
+ values ('Smartphone Huwawei ini punya performa yang kece abizzz dan imeinya terdaftar, mantap mamenn!!');
+insert into product_description (description) 
+values ('Sepatu Naykie untuk olahraga dan lari');
+insert into product_description (description) 
+values ('Pakaian Uniklho yang nyaman dan stylish');
+insert into product_description (description) 
+values ('Kemeja Kereseda yang elegan dan cocok untuk acara formal');
+insert into product_description (description) 
+values ('Seblak pedas dan gurih khas Bandung');
+insert into product_description (description) 
+values ('Jasuke manis dengan jagung, susu, dan keju');
+insert into product_description (description) 
+values ('Cimol gurih dan renyah, jajanan khas Indonesia');
 
     1.f) Insert 3 payment methods.
+insert into payment_method (payment_method_id, method_name, created_at)
+values (1, 'Credit Card', now());
+insert into payment_method (payment_method_id, method_name, created_at)
+values (2, 'Bank Transfer', now());
+insert into payment_method (payment_method_id, method_name, created_at)
+values (3, 'Tunai', now());
 
     1.g) Insert 5 user pada tabel user.
-
+insert into pengguna (user_id,username, nama, alamat, tanggal_lahir, status_user, gender, password, email, created_at, update_at)
+values (1, 'STY1', 'SinTeYong', 'Jl. Merdeka No. 1', '1980-01-01', 'active', 'male', 'password1', 'user1@example.com', now(), current_timestamp),
+	   (2, 'OppaJamali', 'Jamali', 'Jl. Kemerdekaan No. 2', '1985-02-02', 'active', 'female', 'password2', 'user2@example.com', now(), current_timestamp),
+       (3, 'RogerSumatra', 'Wahyudi Dangsang', 'Jl. Proklamasi No. 3', '1990-03-03', 'inactive', 'female', 'password3', 'user3@example.com', now(), current_timestamp),
+       (4, 'Bobyanakhebat', 'Boby Saputra', 'Jl. Pahlawan No. 4', '1995-04-04', 'active', 'male', 'password4', 'user4@example.com', now(), current_timestamp),
+       (5, 'ST12charlie', 'Charlie', 'Jl. Kebangsaan No. 5', '2000-05-05', 'inactive', 'male', 'password5', 'user5@example.com', now(), current_timestamp);
+			
     1.h) Insert 3 transaksi di masing-masing user (min 3 user). (soal berlanjut ke soal 1.j)
+insert into transaksi (transaction_id, user_id, transaction_date, total_amount, payment_method_id)
+values (1, 1, '2024-10-02', 10000, 1),
+	   (2, 1, '2024-10-03', 15000, 3),
+	   (3, 3, '2024-10-04', 12000, 2),
+	   (4, 2, '2024-10-07', 5000, 3);
 
     1.i) Insert 3 product di masing-masing transaksi.
+insert into transaction_detail (transaction_detail_id, transaction_id, product_id, quantity, price)
+values 
+    (5, 2, 2, 3, 12000),  
+    (6, 4, 2, 4, 7000),   
+    (7, 3, 3, 5, 18000),  
+    (8, 4, 4, 5, 5000); 
 
 2) Select
     2.a) Tampilkan nama user / pelanggan dengan gender Laki-laki / M.
+select nama, gender from pengguna
+where gender = 'male';
 
     2.b) Tampilkan product dengan id = 3.
+select * from product
+where product_id = 3
 
     2.c) Tampilkan data pelanggan yang created_at dalam range 7 hari kebelakang dan mempunyai nama mengandung kata ‘a’.
+select * from pengguna
+where created_at >= current_date - interval '7 days'
+and nama like '%a%';
 
     2.d) Hitung jumlah user / pelanggan dengan status gender Perempuan.
+select count(*) from pengguna
+where gender = 'female';
 
     2.e) Tampilkan data pelanggan dengan urutan sesuai nama abjad
+select * from pengguna
+order by nama asc;
 
     2.f) Tampilkan 5 data transaksi dengan product id = 3
+select * from transaksi
+where exists (
+select 1 from transaction_detail
+where transaksi.transaction_id = transaction_detail.transaction_id
+and transaction_detail.product_id = 3)
+limit 5;
 
 3. Update
     3.a) Ubah data product id 1 dengan nama ‘product dummy’.
+update product set product_name = 'product dummy'
+where product_id = 1;
 
     3.b) Update qty = 3 pada transaction detail dengan product id 1.
+update transaction_detail set quantity = 3
+where product_id = 1;
 
 4. Delete
     4.a) Delete data pada tabel product dengan id 1.
+delete from product 
+where product_id = 1;
 
     4.b) Delete pada tabel product dengan product-type id 1.
-
+delete from product
+where product_type_id = 1;
 
 RELEASE 2: Join, Union, Sub-query, Function
 
 1. Gabungkan data transaksi dari user id 1 dan user id 2.
+select * from transaksi
+where user_id = 1
+union
+select * from transaksi
+where user_id = 2;
 
 2. Tampilkan jumlah harga transaksi user id 1.
+select sum(total_amount) as total_harga_transaksi
+from transaksi where user_id = 1;
 
 3. Tampilkan total transaksi dengan product type 2.
+select sum(transaction_detail.price * transaction_detail.quantity) as total_transaksi
+from transaction_detail
+join product on transaction_detail.product_id = product.product_id
+join transaksi on transaction_detail.transaction_id = transaksi.transaction_id
+where product.product_type_id = 2;
 
 4. Tampilkan semua field table product dan field name table product type yang saling berhubungan.
+select product.* , product_type.type_name
+from product
+join product_type on product.product_type_id = product_type.id;
 
 5. Tampilkan semua field table transaction, field name table product dan field name table user.
+select transaksi.*, product.product_name, pengguna.username
+from transaksi
+join transaction_detail on transaksi.transaction_id = transaction_detail.transaction_id
+join product on transaction_detail.product_id = product.product_id
+join pengguna on transaksi.user_id = pengguna.user_id;
 
 6. Tampilkan data products yang tidak pernah ada di tabel transaction_details dengan sub-query.
+select * from product 
+where product.product_id not in (
+	select transaction_detail.product_id
+	from transaction_detail);
+
+		-- 7. Menerapkan otomasi menggunakan function dan trigger pada column updated_at di semua tabel dan contohkan hasilnya
+			-- a. membuat fungsi untuk memperbarui update_at
+create or replace function update_updated_at()
+returns trigger as $$
+begin
+	new.updated_at = now();
+	return new;
+end;
+$$ language plpgsql;
+			-- b. selanjutnya membuat trigger pada setiap tabel
+				-- Untuk membuat pemicu, untuk setiap tabel yang memanggil fungsi 'update_update_at()' setiap kali ada pembaruan pada baris, maka saya mencoba menggunakan tabel 'product'
+create trigger product_update_at_trigger
+before update on product
+for each row
+execute function update_updated_at();
+			-- c. untuk contoh penggunaannya, saya akan melihat bagaimana apakah ini berfungsi saat dijalankan. Misalnya kita memeiliki tabel 'product' dengan kolom 'updated_at'. Maka ketika kita melakukan pembaruan pada baris tabel 'product', nilai kolom 'updated_at' akan diperbarui secara otomatis.
+				-- memperbarui harga product dengan id = 1
+update product
+set harga = 700
+where product_id = 1;
+
+		-- 8. Melakukan create view yang menghasilkan data yang sama dengan (menampilkan semua field table product dan field name table product type yang saling berhubungan)
+create or replace view product_with_type as select product.*, product_type.type_name
+from product
+join product_type on product.product_type_id = product_type.id;

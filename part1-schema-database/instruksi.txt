@@ -1,2 +1,25 @@
 Instruksi:
 - Upload file JPG di folder ini!
+Instruksi:
+- Tulis/pasti code SQL pada file yang telah disediakan!
+-- Part 1 - 
+-- 1. Mengecek sistem dapat menyimpan data mengenai detail item product, yaitu product_type, product_description, merk, payment_methods
+select product.product_name, product_type.type_name, product_description.description
+from product
+join product_type on product.product_type_id = product_type.id
+join product_description on product.product_description_id = product_description.id;
+-- 2. Mengecek sistem juga harus menyimpan data mengenai pelanggan yang akan membeli produk tsb diantaranya : nama, alamat, tanggal lahir, status_user, gender, created_at, updated_at
+select nama, alamat, tanggal_lahir, status_user, gender, created_at, update_at 
+from pengguna
+select * from transaction_detail 
+-- 3. Sistem dapat mencatat transaksi pembelian dari pelanggan
+insert into transaksi (transaction_id, user_id, transaction_date, total_amount, payment_method_id)
+values (1, 2, 2024-06-10, 10000, 3); -- Ini contoh transaksi dengan user_id 2, total pembayaran 10000, menggunakan payment_method_id 3
+-- 4. Sistem dapat mencatat detail transaksi pembelian dari pelanggan
+insert into transaction_detail (transaction_detail_id, transaction_id, product_id, quantity, price)
+values 
+    (1, 1, 2 ,2, 10000),  -- Produk ID 2 dengan jumlah 2 dan harga 10000
+    (1, 2, 3, 3, 15000);  -- Produk ID 3 dengan jumlah 3 dan harga 15000
+    
+-- 5. Menggunakan draw.io untuk membuat ERD
+    --
